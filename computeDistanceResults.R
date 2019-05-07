@@ -52,8 +52,8 @@ computeDistanceResults <- function(pathToUCR="../data",measure=ensembleMetric){
   #classification accuracy error
   accuracy <- c()
   for (j in 1:length(trainXs)){
-    result <- Dknn(trainXs[[i]], trainYs[[i]], testXs[[i]], 1, dis = measure)
-    accuracy <- c(accuracy, 1-length(which(result == testYs[[i]]))/length(testY[[i]]))
+    result <- Dknn(trainXs[[j]], trainYs[[j]], testXs[[j]], 1, dis = measure)
+    accuracy <- c(accuracy, 1-length(which(result == testYs[[j]]))/length(testYs[[j]]))
   }
   #contamination tolerance
   cont_tolerance <- c()
