@@ -52,6 +52,7 @@ computeDistanceResults <- function(pathToUCR="../data",measure=ensembleMetric){
   #classification accuracy error
   accuracy <- c()
   for (j in 1:length(trainXs)){
+    print(data_names[j])
     result <- Dknn(trainXs[[j]], trainYs[[j]], testXs[[j]], 1, dis = measure)
     accuracy <- c(accuracy, 1-length(which(result == testYs[[j]]))/length(testYs[[j]]))
   }
@@ -134,7 +135,9 @@ imprecisionInvariance <- function(testX,testY,iter.max=3,measure=ensembleMetric)
 testBreakDown <- function(c1,c2,n=1,measure,FUN=contaminate){
   results <- rep(F,n)
   for (i in 1:n){
-    results[i] <- (scaleMetric(measure(c1,c2)) - scaleMetric(measure(c1,FUN(c1)))) > 0
+    r <- (scaleMetric(measure(c1,c2)) - scaleMetric(measure(c1,FUN(c1)))) > 0
+    if (!r) return(F)
+    results[i] <- r
   }
   return(all(results))
 }
@@ -143,11 +146,10 @@ contaminate <- function(x,k=0.05){
   n <- length(x)
   s <- max(c(floor(n*k)-1,1))
   o <- sample(1:n)[1:s]
-  x[o] <- 1e+100*rnorm(1)
+  x[o] <- Inf
   return(x)
 }
-addEpsilon <- function(x,rand=rnorm,...){
+addEpsilon <- function(x){
   n <- length(x)
-  s <- sd(x)
-  return(x+rand(n,sd=s/n))
+  return(x+runif(n,min=-1e-10,max = 1e-10))
 }
