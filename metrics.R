@@ -50,20 +50,12 @@ smother <- function(x,rand=rnorm,...){
   s <- sd(x)
   x %>% length() %>% rand(sd=s/length(x),...) %>% {.+x} %>% return
 }
-discreteMetric <- function(x,y){
-  if (all(x != y)) return(1)
-  else return(0)
-}
+
 
 divAbs <- function(x){
   smalls <- x %>% {which(abs(.) < 1)}
   x[smalls] <- x[smalls]^-1
   return(x)
-}
-
-logDistance <- function(x,y){
-  return(sum(log((1+abs(x-y)))))
-  #{x-y} %>% abs %>% {.+1} %>% log %>% sum %>% {./1} %>% return
 }
 smotherOnce <- function(x,k=0.1){
   
@@ -139,10 +131,26 @@ ensembleMetric <- function(x,y,l=0.1){
 scaleMetric <- function(d){
   return(1-(1/(1+d)))
 }
-fastEDR <- function(x,y,g=0){
-  if (g!=0) return(length(which(abs(x-y) > g)))
+
+euclid <- function(x,y){
+  return(sqrt(sum((x-y)^2)))
+}
+
+logDistance <- function(x,y){
+  return(sum(log((1+abs(x-y)))))
+}
+
+fastED <- function(x,y){
   return(length(which(x!=y)))
 }
 lpnorm <- function(x,y,p){
   return(sum(abs(x-y)^p) ^(1/p))
+}
+fastEDR <- function(x,y){
+  g <- max(c(median(abs(x-median(x))), median(abs(y-median(y)))))*0.1
+  return(length(which(abs(x-y) > g)))
+}
+discreteMetric <- function(x,y){
+  if (all(x != y)) return(1)
+  else return(0)
 }

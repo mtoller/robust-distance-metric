@@ -93,13 +93,9 @@ Dknn <- function(trainX, trainY, test, k, dis=ensembleMetric,...){
 }
 
 contaminationTolerance <- function(testX,testY,iter.max=3,measure=ensembleMetric){
-  if (iter.max > 0)
-  n <- iter.max
-  else
-    n <- length(testY)
-  performance <- rep(F,n)
   classes <- unique(testY)
   n <- length(classes)
+  performance <- rep(F,n)
   for (i in 1:n){
     x <- as.numeric(testX[which(testY==classes[i])[1],])
     other_classes <- which(testY != classes[i][1])
@@ -113,13 +109,9 @@ contaminationTolerance <- function(testX,testY,iter.max=3,measure=ensembleMetric
   return(mean(performance))
 }
 imprecisionInvariance <- function(testX,testY,iter.max=3,measure=ensembleMetric){
-  if (iter.max > 0)
-    n <- iter.max
-  else
-    n <- length(testY)
-  performance <- rep(F,n)
   classes <- unique(testY)
   n <- length(classes)
+  performance <- rep(F,n)
   for (i in 1:n){
     x <- as.numeric(testX[which(testY==classes[i])[1],])
     other_classes <- which(testY != classes[i][1])
